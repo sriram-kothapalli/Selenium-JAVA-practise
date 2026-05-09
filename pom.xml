@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    WHAT IS THIS FILE?
+    ==================
+    This is the pom.xml — it stands for "Project Object Model".
+    It is the HEART of every Maven project. Maven is a build tool that:
+    → Downloads all the libraries (JAR files) your project needs
+    → Compiles your Java code
+    → Runs your tests
+    → Packages your project into a JAR/WAR file
+
+    You NEVER download JAR files manually. You just describe what you need
+    here, and Maven fetches everything automatically from the internet
+    (from a website called Maven Central Repository: repo.maven.apache.org).
+
+    Think of pom.xml like a shopping list you hand to Maven:
+    "Get me Selenium 4.43.0, TestNG 7.12.0, and SLF4J 2.0.17 please."
+    Maven goes and gets them all for you.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!--
+        MODEL VERSION
+        ==============
+        This tells Maven which version of the POM format this file uses.
+        Always set to 4.0.0 — this has been the standard for many years
+        and you should never change it.
+    -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        PROJECT IDENTITY (Coordinates)
+        ================================
+        These three tags are called "Maven Coordinates". Together they
+        create a unique identity for your project in the entire Maven world.
+        Think of it like a postal address — groupId is the city,
+        artifactId is the street, and version is the house number.
+
+        groupId
+        → A namespace to group related projects together.
+        → Usually written in reverse domain name format.
+        → Examples: com.google, org.apache, com.yourcompany
+        → If you do not have a domain, org.example is fine for practice.
+
+        artifactId
+        → The actual name of THIS specific project.
+        → This becomes the name of the output file Maven produces.
+        → Example: selenium-java-practice.jar
+        → Use lowercase letters and hyphens (no spaces or uppercase).
+
+        version
+        → The current version number of your project.
+        → "SNAPSHOT" means still in development, not a final release.
+        → When your project is ready for production release, you change
+          this to a clean number like "1.0.0" and remove "SNAPSHOT".
+    -->
+    <groupId>org.example</groupId>
+    <artifactId>selenium-java-practice</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <!--
+        PROPERTIES (Global Variables / Version Management)
+        ===================================================
+        This section acts like a "variables" block at the top of your file.
+        Instead of writing the same version number in 10 different places,
+        you define it ONCE here and reference it everywhere using ${name}.
+
+        WHY THIS MATTERS:
+        Imagine you have Selenium's version written in 5 different places.
+        When Selenium releases a new version, you would have to find and
+        update all 5 places and risk missing one.
+        With properties, you update ONE line and everything else updates
+        automatically. This is a best practice in every real project.
+
+        maven.compiler.release
+        → Tells Maven which version of Java to use when compiling your code.
+        → "release" is the modern way (replaces the old source and target tags).
+        → It sets source, target AND bootclasspath all at once correctly.
+        → Must match the JDK version installed on your machine (Java 21 here).
+
+        selenium.version
+        → The version of Selenium WebDriver to download and use.
+        → 4.43.0 is the latest stable release as of 2026.
+        → Used below as ${selenium.version}.
+
+        testng.version
+        → The version of TestNG testing framework to use.
+        → 7.12.0 is the latest stable release as of 2026.
+        → Used below as ${testng.version}.
+    -->
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <selenium.version>4.43.0</selenium.version>
+        <testng.version>7.12.0</testng.version>
+    </properties>
+
+
+    <!--
+        DEPENDENCIES (External Libraries Your Project Needs)
+        ======================================================
+        Dependencies are external libraries — code written by other people
+        that you want to use in your project.
+
+        Each dependency block tells Maven:
+        → WHERE to find the library (groupId + artifactId)
+        → WHICH version to download (version)
+        → WHEN to use it (scope — optional)
+
+        Maven downloads them from: https://repo.maven.apache.org/maven2/
+        and stores them locally in a cache folder on your machine:
+        → Mac/Linux: ~/.m2/repository/
+        → Windows:   C:\Users\YourName\.m2\repository\
+
+        The second time you build, Maven uses the local cache and does
+        NOT re-download — making builds much faster.
+    -->
+    <dependencies>
+
+        <!--
+            DEPENDENCY 1: Selenium WebDriver (Core Library)
+            =================================================
+            This is the main library that gives your Java code the ability
+            to control real web browsers like Chrome, Firefox, and Edge.
+
+            What you can do with Selenium:
+            → Open a URL          : driver.get("https://google.com")
+            → Find elements       : driver.findElement(By.id("search"))
+            → Click buttons       : element.click()
+            → Type text           : element.sendKeys("hello world")
+            → Get page title      : driver.getTitle()
+            → Take screenshots    : ((TakesScreenshot) driver).getScreenshotAs(...)
+            → Close the browser   : driver.quit()
+
+            SELENIUM MANAGER (Built-in since Selenium 4.6):
+            → In older versions, you had to manually download a "driver"
+              file (chromedriver.exe) and tell your code where it was.
+            → Since Selenium 4.6, a tool called "Selenium Manager" is
+              built directly inside this library.
+            → It automatically detects your Chrome/Firefox version and
+              downloads the correct driver behind the scenes.
+            → You do NOT need WebDriverManager or any other helper library.
+            → You do NOT need to call any setup() method. Just write:
+                  driver = new ChromeDriver(); and it just works!
+
+            ${selenium.version} resolves to 4.43.0 from properties above.
+        -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!--
+            DEPENDENCY 2: TestNG (Test Framework)
+            ======================================
+            TestNG is the framework that organises, manages, and runs
+            your automated tests. Without a test framework, you would
+            have to write your own logic to run tests, track pass/fail,
+            and generate reports — TestNG does all of this for you.
+
+            Key annotations TestNG provides:
+            @Test          → Marks a method as a test case to be executed
+            @BeforeMethod  → Runs BEFORE every single @Test method
+                             (perfect place to open the browser)
+            @AfterMethod   → Runs AFTER every @Test method, even if it failed
+                             (perfect place to close the browser)
+            @BeforeClass   → Runs once before ALL tests in the class
+            @AfterClass    → Runs once after ALL tests in the class
+            @BeforeSuite   → Runs once before the entire test suite
+            @AfterSuite    → Runs once after the entire test suite
+            @DataProvider  → Supplies multiple sets of data to one @Test
+                             (lets you run the same test with different inputs)
+            @Parameters    → Injects values from testng.xml into your test
+
+            TestNG also:
+            → Generates HTML test reports (test-output/index.html)
+            → Lets you group tests (smoke, regression, etc.)
+            → Supports parallel test execution
+            → Handles test dependencies and ordering
+
+            scope="test"
+            → This is a Maven scope setting. It means:
+            → TestNG is ONLY available during the test compilation and
+              test execution phases of the Maven build.
+            → It will NOT be included in your final packaged JAR/WAR.
+            → This is correct because end users of your app do not need
+              TestNG — only developers running tests do.
+            → Always use scope="test" for testing libraries.
+
+            ${testng.version} resolves to 7.12.0 from properties above.
+        -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--
+            DEPENDENCY 3: SLF4J Simple (Logging Backend)
+            ==============================================
+            SLF4J stands for "Simple Logging Facade for Java".
+            It is a logging system that controls what gets printed to
+            the console and how it is formatted during your test run.
+
+            Why do we need this?
+            → Selenium, TestNG, and other libraries use SLF4J internally
+              to print their own messages (warnings, debug info, errors).
+            → If you do not include an SLF4J implementation, you will see
+              this ugly warning every time you run tests:
+              "SLF4J: No SLF4J providers were found."
+            → slf4j-simple is the lightest solution — it just prints all
+              log messages directly to the console. No config needed.
+
+            Why version 2.0.17 and NOT the old 1.7.x?
+            → Selenium 4 was upgraded to use SLF4J version 2.x API internally.
+            → If you mix SLF4J 1.x with a library that needs SLF4J 2.x,
+              you get version conflict warnings in the console output.
+            → Always use SLF4J 2.x when using Selenium 4.
+
+            Note: No scope="test" here because logging may also be needed
+            in the main application code, not just tests.
+        -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.17</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <!--
+        BUILD CONFIGURATION
+        ====================
+        This section configures HOW Maven builds and tests your project.
+        Maven uses "plugins" to do its work — each plugin is responsible
+        for a specific task (compiling, testing, packaging, deploying, etc.).
+
+        Maven's build lifecycle has phases that run in order:
+        validate → compile → test → package → verify → install → deploy
+
+        When you run "mvn test", Maven runs all phases up to "test":
+        1. validate  → checks the project structure is correct
+        2. compile   → compiles src/main/java using the compiler plugin
+        3. test      → compiles src/test/java and runs tests via surefire plugin
+    -->
+    <build>
+        <plugins>
+
+            <!--
+                PLUGIN 1: Maven Compiler Plugin
+                ================================
+                This plugin compiles your Java source code.
+                It transforms your human-readable .java files into
+                bytecode .class files that the Java Virtual Machine (JVM)
+                can understand and execute.
+
+                Without this plugin configured, Maven uses a very old
+                default Java version (Java 5!) which cannot compile
+                modern Java 21 features like records, sealed classes,
+                pattern matching, text blocks, etc.
+
+                release tag
+                → The modern way to set the Java version for compilation.
+                → Setting release=21 means:
+                     - Your source code must be valid Java 21 syntax
+                     - The output .class files run on Java 21+
+                     - You cannot accidentally use APIs removed in Java 21
+                → This single tag replaces the older approach of setting
+                  both source and target separately.
+
+                ${maven.compiler.release} resolves to 21 from properties.
+
+                Version 3.13.0 is the latest stable compiler plugin in 2026.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+
+            <!--
+                PLUGIN 2: Maven Surefire Plugin
+                ================================
+                This is the plugin that actually RUNS your tests.
+                When you execute "mvn test" in the terminal, Surefire is
+                the plugin that kicks off your TestNG test suite.
+
+                Without Surefire, Maven would compile your test code but
+                never actually execute it — so this plugin is essential.
+
+                Version 3.5.5 is the latest stable Surefire plugin in 2026.
+
+                CONFIGURATION EXPLAINED:
+
+                suiteXmlFiles
+                → Tells Surefire to use testng.xml as the entry point for
+                  all test execution instead of auto-discovering test classes.
+                → testng.xml is your master control file. It defines:
+                     - Which test classes to run
+                     - In what order
+                     - Whether to run in parallel
+                     - Which groups to include or exclude
+                → Without this, Surefire would try to find test classes on
+                  its own using naming conventions, which is unreliable in
+                  large projects.
+                → The path is relative to your project root folder
+                  (same level as pom.xml and src/).
+
+                properties → listener
+                → This is where you register TestNG "reporters" — special
+                  built-in classes that generate reports after tests finish.
+                → You can list multiple reporters separated by commas.
+
+                TWO REPORTERS CONFIGURED HERE:
+
+                Reporter 1: EmailableReporter2
+                → Generates a single self-contained HTML file at:
+                  target/surefire-reports/emailable-report.html
+                → "Emailable" means the entire report is ONE file with
+                  no external dependencies — perfect to attach to an
+                  email or share with your team after a test run.
+                → Shows: test names, pass/fail status, duration, errors.
+                → Great for sharing results with non-technical stakeholders
+                  (managers, clients) who just want to see what passed.
+
+                Reporter 2: XMLReporter
+                → Generates machine-readable XML files at:
+                  target/surefire-reports/testng-results.xml
+                → XML format is not meant for humans to read — it is
+                  designed to be consumed by other tools like:
+                     - Jenkins CI/CD (displays test trends over time)
+                     - GitHub Actions (shows test results in PR view)
+                     - Allure Report (converts XML into rich HTML reports)
+                     - SonarQube (tracks test quality metrics)
+                → This is the STANDARD format for CI/CD pipelines.
+                → Always include this in production projects.
+
+                After "mvn test" you will find reports in:
+                → target/surefire-reports/emailable-report.html (open in browser)
+                → target/surefire-reports/testng-results.xml    (used by CI tools)
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.5</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>org.testng.reporters.EmailableReporter2,org.testng.reporters.XMLReporter</value>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+    WHAT IS THIS FILE?
+    ==================
+    This is the TestNG Suite XML file. It is the MASTER CONTROL FILE
+    for your entire test automation project.
+
+    Think of it like a TV remote control:
+    You press one button (mvn test) and THIS file decides:
+       - Which tests to run
+       - In what order
+       - How many at the same time (parallel)
+       - Which browsers to use
+       - What to do when a test fails
+
+    You never run individual test classes manually in a real project.
+    Everything is controlled from this one file.
+
+    The DOCTYPE line below tells TestNG the rules and grammar for this XML.
+    It is like saying "this file follows TestNG's official format".
+-->
+
+<!--
+    SUITE — THE ENTIRE TEST RUN
+    ============================
+    This is the outermost tag that wraps everything.
+    One suite = one full test execution (e.g. your nightly CI/CD run).
+
+    ATTRIBUTES EXPLAINED:
+
+    name="Automation Suite"
+    → Just a label. This name appears in your test reports so you know
+      which suite produced which results. Choose something meaningful.
+
+    verbose="2"
+    → Controls how much detail is printed in the console while tests run.
+      0 = silent (nothing printed)
+      1 = minimal (just pass/fail)
+      2 = normal (test names, results) which is a good default
+      5 = maximum (every internal TestNG step, useful for debugging)
+
+    parallel="tests"
+    → Tells TestNG to run multiple test blocks AT THE SAME TIME.
+      Options:
+        "none"    → Run everything one by one (slowest, safest)
+        "tests"   → Run each test block in parallel (we use this)
+        "classes" → Run each class in parallel
+        "methods" → Run each @Test method in parallel (fastest, riskiest)
+      For beginners: start with "none". Switch to "tests" when your
+      tests are stable and independent of each other.
+
+    thread-count="3"
+    → How many tests to run simultaneously when parallel is enabled.
+      Here we run 3 test blocks at the same time.
+      Rule of thumb: match this to the number of CPU cores on your machine.
+      Too high = your machine slows down. Start with 2 or 3.
+
+    preserve-order="true"
+    → Run the test blocks in the EXACT ORDER they appear in this file.
+      If false, TestNG may reorder them. Always set to true in production
+      so your report results are predictable and consistent.
+-->
+<suite name="Automation Suite"
+       verbose="2"
+       parallel="tests"
+       thread-count="3"
+       preserve-order="true">
+
+
+    <!--
+        SECTION 1: GLOBAL LISTENERS
+        ============================
+        What is a Listener?
+        A listener is a Java class that "listens" to test events and
+        reacts to them automatically.
+
+        Events a listener can react to:
+        → onTestStart    : fired when a test begins
+        → onTestSuccess  : fired when a test passes
+        → onTestFailure  : fired when a test fails
+        → onTestSkipped  : fired when a test is skipped
+        → onFinish       : fired when the entire suite finishes
+
+        Real-world uses:
+        → Take a screenshot automatically when a test fails
+        → Log results to an Extent Report or Allure Report
+        → Send a Slack or email notification when tests finish
+        → Retry a failed test automatically
+
+        Listeners listed here apply to ALL tests in the entire suite.
+        You can also attach a listener to just one test block if needed.
+
+        NOTE FOR BEGINNERS:
+        The two listener classes below (TestListener and RetryListener)
+        are Java classes YOU will write as your project grows.
+        They do not exist yet. Once you create them in the
+        framework/listeners/ package, uncomment this section.
+    -->
+    <!--
+    <listeners>
+        <listener class-name="framework.listeners.TestListener"/>
+        <listener class-name="framework.listeners.RetryListener"/>
+    </listeners>
+    -->
+
+
+    <!--
+        SECTION 2: GOOGLE TESTS (Currently Active)
+        ============================================
+        This is the only test block active right now because
+        GoogleTest is the only class that exists in the project.
+
+        As you create more test classes, add new test blocks below
+        following the same pattern as the smoke and regression
+        examples shown in sections 3 and 4.
+    -->
+    <test name="Google Tests">
+        <classes>
+            <!--
+                tests.GoogleTest means:
+                → Look in the "tests" package (src/test/java/tests/)
+                → Find the file "GoogleTest.java"
+                → Run all @Test methods inside it
+            -->
+            <class name="tests.GoogleTest"/>
+            <class name="tests.AdvancedTestNGFeaturesTest"/>
+        </classes>
+    </test>
+
+
+    <!--
+        SECTION 3: SMOKE TESTS (Uncomment when ready)
+        ===============================================
+        What is a Smoke Test?
+        A quick, high-level check to verify the most critical features
+        of your application are working BEFORE running deeper tests.
+        Like checking if the engine starts before testing the whole car.
+        Smoke tests are fast, usually 5 to 15 minutes maximum.
+        They run first. If smoke tests fail, no point running regression.
+
+        Typical smoke tests in a web app:
+        → Can the user log in?
+        → Does the home page load?
+        → Is the main navigation working?
+
+        In CI/CD pipelines, smoke tests run on EVERY code commit.
+
+        GROUPS EXPLAINED:
+        Groups let you TAG your @Test methods in Java and then choose
+        which tags to run here in the XML.
+
+        In your Java test class you would write:
+            @Test(groups = {"smoke"})
+            public void verifyLogin() { ... }
+
+        Then here in XML, include name="smoke" means:
+        → Only run @Test methods that have groups = "smoke"
+        → Skip all other @Test methods in the listed classes
+
+        Common group names used in industry:
+        → "smoke"      : critical path tests, run on every commit
+        → "regression" : full test suite, run nightly
+        → "sanity"     : quick checks after a bug fix
+        → "e2e"        : end-to-end user journey tests
+    -->
+    <!--
+    <test name="Smoke Tests">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.smoke.LoginTest"/>
+            <class name="tests.smoke.HomePageTest"/>
+        </classes>
+    </test>
+    -->
+
+
+    <!--
+        SECTION 4: REGRESSION TESTS (Uncomment when ready)
+        ====================================================
+        What is Regression Testing?
+        After developers fix a bug or add a new feature, regression
+        testing checks that NOTHING ELSE broke as a side effect.
+        It covers a much wider set of scenarios than smoke tests.
+        Regression tests are slower, can run 30 minutes to several hours.
+        They typically run NIGHTLY (scheduled, not on every commit).
+
+        Example: Developer adds a discount feature to checkout.
+        Regression tests check:
+        → Does checkout still work normally?
+        → Is the cart still calculating totals correctly?
+        → Did the login page break?
+        → Did the profile page break?
+    -->
+    <!--
+    <test name="Regression Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.regression.CheckoutTest"/>
+            <class name="tests.regression.CartTest"/>
+        </classes>
+    </test>
+    -->
+
+
+    <!--
+        SECTION 5: CROSS-BROWSER TESTS (Uncomment when ready)
+        =======================================================
+        What is Cross-Browser Testing?
+        Your website must work correctly on ALL major browsers:
+        Chrome, Firefox, Edge, Safari.
+        Cross-browser tests run the SAME test scenarios on DIFFERENT
+        browsers to catch browser-specific bugs.
+
+        Example bug caught by cross-browser testing:
+        A dropdown works on Chrome but does not open on Firefox.
+
+        HOW PARAMETERS WORK:
+        The parameter tag passes data from this XML into your Java test.
+
+        name="browser"  → the variable name your Java code reads
+        value="chrome"  → the actual value sent in at runtime
+
+        In your Java class you read it like this:
+            @Parameters({"browser"})
+            public void setUp(String browser) {
+                if (browser.equals("chrome"))  { driver = new ChromeDriver(); }
+                if (browser.equals("firefox")) { driver = new FirefoxDriver(); }
+            }
+
+        To test Firefox, add another test block with value="firefox".
+        Each block runs independently on its own browser.
+    -->
+    <!--
+    <test name="Chrome Tests">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="tests.crossbrowser.CrossBrowserTest"/>
+        </classes>
+    </test>
+
+    <test name="Firefox Tests">
+        <parameter name="browser" value="firefox"/>
+        <classes>
+            <class name="tests.crossbrowser.CrossBrowserTest"/>
+        </classes>
+    </test>
+    -->
+
+
+</suite>
