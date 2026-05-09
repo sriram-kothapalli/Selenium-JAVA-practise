@@ -1,4 +1,4 @@
-package tests;
+package practise;
 
 public class Variable {
 
