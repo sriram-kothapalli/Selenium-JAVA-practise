@@ -1,0 +1,1897 @@
+// ============================================================
+//   JAVA COMPLETE CONCEPTS - SDET EDITION
+//   All Java concepts, keywords, and examples in ONE file
+//   Every section has comments explaining WHAT and WHY
+// ============================================================
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 1: PACKAGE & IMPORTS
+// ─────────────────────────────────────────────────────────────
+// 'package' → groups related classes (like folders)
+// 'import'  → brings in external classes to use in this file
+
+package com.sdet.java.concepts;
+
+import java.util.*;                        // wildcard import - all classes in java.util
+import java.util.ArrayList;               // specific import
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Queue;
+import java.util.Optional;
+import java.util.stream.Collectors;        // for Stream API
+import java.util.stream.Stream;
+import java.util.function.Predicate;       // functional interface
+import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.io.*;                          // for File I/O
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 2: ACCESS MODIFIERS (Keywords)
+// ─────────────────────────────────────────────────────────────
+//  public    → accessible everywhere
+//  private   → accessible only within the class
+//  protected → accessible in same package + subclasses
+//  (default) → accessible only within the same package (no keyword)
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 3: CLASS DECLARATION + ALL CLASS KEYWORDS
+// ─────────────────────────────────────────────────────────────
+// 'public'   → anyone can use this class
+// 'class'    → declares a class
+// 'final'    → this class CANNOT be extended (inherited)
+// 'abstract' → cannot instantiate directly, must be subclassed
+// 'extends'  → inherits from a parent class
+// 'implements' → fulfills an interface contract
+
+public class JavaAllConcepts_SDET {
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 4: KEYWORDS QUICK REFERENCE TABLE
+    // ─────────────────────────────────────────────────────────
+    /*
+     * ALL 53 JAVA KEYWORDS:
+     *
+     * ACCESS:       public, private, protected
+     * CLASS:        class, interface, enum, record, extends, implements, abstract
+     * MODIFIERS:    static, final, synchronized, volatile, transient, native, strictfp
+     * CONTROL FLOW: if, else, switch, case, default, break, continue, return
+     * LOOPS:        for, while, do
+     * EXCEPTION:    try, catch, finally, throw, throws
+     * OBJECT:       new, this, super, instanceof, null
+     * PRIMITIVES:   byte, short, int, long, float, double, char, boolean
+     * VOID:         void
+     * PACKAGE:      package, import
+     * MEMORY:       new, null
+     * UNUSED/RESERVED: goto, const (reserved but not used)
+     * MISC:         assert, var (Java 10+)
+     */
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 5: VARIABLES & DATA TYPES
+    // ─────────────────────────────────────────────────────────
+    // 'static'  → belongs to the CLASS, not an object instance
+    // 'final'   → value cannot change (constant)
+    // 'var'     → local variable type inference (Java 10+)
+
+    // --- PRIMITIVE DATA TYPES (stored directly in memory stack) ---
+    static byte    myByte    = 100;           // 8-bit  → range: -128 to 127
+    static short   myShort   = 30000;         // 16-bit → range: -32,768 to 32,767
+    static int     myInt     = 1_000_000;     // 32-bit → most common integer type (underscore for readability)
+    static long    myLong    = 9_999_999_999L;// 64-bit → suffix 'L' required
+    static float   myFloat   = 3.14f;         // 32-bit decimal → suffix 'f' required
+    static double  myDouble  = 3.14159265;    // 64-bit decimal → default for decimals
+    static char    myChar    = 'A';           // 16-bit → single character in single quotes
+    static boolean myBool    = true;          // true or false only
+
+    // --- CONSTANTS (static + final = class-level constant) ---
+    static final String APP_NAME    = "SDET Java Guide";  // 'final' = cannot reassign
+    static final int    MAX_RETRIES = 3;
+
+    // --- REFERENCE TYPES (stored as pointer to object in heap) ---
+    static String  myString  = "Hello, SDET!"; // String is an object, not a primitive
+    static int[]   myArray   = {1, 2, 3, 4, 5};
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 6: MAIN METHOD — ENTRY POINT
+    // ─────────────────────────────────────────────────────────
+    // 'public'  → JVM can access it
+    // 'static'  → JVM calls it without creating an object
+    // 'void'    → returns nothing
+    // 'main'    → name JVM looks for
+    // String[]  → command-line arguments array
+
+    public static void main(String[] args) {
+
+        System.out.println("========================================");
+        System.out.println("  JAVA CONCEPTS FOR SDET - START");
+        System.out.println("========================================\n");
+
+        // Call all concept demo methods
+        demonstrateDataTypes();
+        demonstrateOperators();
+        demonstrateControlFlow();
+        demonstrateLoops();
+        demonstrateArrays();
+        demonstrateStrings();
+        demonstrateOOP();
+        demonstrateCollections();
+        demonstrateExceptionHandling();
+        demonstrateGenerics();
+        demonstrateStreamAPI();
+        demonstrateLambdas();
+        demonstrateFunctionalInterfaces();
+        demonstrateMultithreading();
+        demonstrateFileIO();
+        demonstrateEnums();
+        demonstrateOptional();
+        demonstrateVarKeyword();
+        demonstrateTypecastingAndWrappers();
+        demonstrateStaticAndInstance();
+        demonstrateInnerClasses();
+        demonstrateAnonymousClass();
+        demonstrateSDETPatterns();
+
+        System.out.println("\n========================================");
+        System.out.println("  ALL CONCEPTS DEMONSTRATED SUCCESSFULLY");
+        System.out.println("========================================");
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 7: DATA TYPES DEMO
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateDataTypes() {
+        System.out.println("--- SECTION: DATA TYPES ---");
+
+        // 'var' keyword (Java 10+) → compiler infers the type automatically
+        var name    = "Selenium";      // inferred as String
+        var count   = 42;              // inferred as int
+        var price   = 9.99;           // inferred as double
+        var isValid = false;          // inferred as boolean
+
+        System.out.println("var name    = " + name);
+        System.out.println("var count   = " + count);
+        System.out.println("var price   = " + price);
+        System.out.println("var isValid = " + isValid);
+
+        // String pool - same literal reuses object
+        String s1 = "test";
+        String s2 = "test";
+        String s3 = new String("test"); // forces new object in heap
+
+        System.out.println("s1 == s2        : " + (s1 == s2));        // true  (same pool)
+        System.out.println("s1 == s3        : " + (s1 == s3));        // false (different heap)
+        System.out.println("s1.equals(s3)   : " + (s1.equals(s3)));   // true  (content equal)
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 8: OPERATORS
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateOperators() {
+        System.out.println("--- SECTION: OPERATORS ---");
+
+        int a = 10, b = 3;
+
+        // Arithmetic operators
+        System.out.println("a + b  = " + (a + b));   // Addition       → 13
+        System.out.println("a - b  = " + (a - b));   // Subtraction    → 7
+        System.out.println("a * b  = " + (a * b));   // Multiplication → 30
+        System.out.println("a / b  = " + (a / b));   // Division       → 3 (int division!)
+        System.out.println("a % b  = " + (a % b));   // Modulus        → 1 (remainder)
+
+        // Compound assignment
+        int x = 5;
+        x += 3;   // x = x + 3 → 8
+        x -= 1;   // x = x - 1 → 7
+        x *= 2;   // x = x * 2 → 14
+        x /= 2;   // x = x / 2 → 7
+        x %= 3;   // x = x % 3 → 1
+        System.out.println("Compound x = " + x);
+
+        // Increment / Decrement
+        int i = 5;
+        System.out.println("i++  = " + i++); // Post: returns 5, THEN increments
+        System.out.println("++i  = " + ++i); // Pre:  increments FIRST, then returns
+        System.out.println("i--  = " + i--); // Post: returns 7, THEN decrements
+        System.out.println("--i  = " + --i); // Pre:  decrements FIRST, then returns
+
+        // Comparison (Relational) operators → always return boolean
+        System.out.println("a == b  : " + (a == b));  // equal
+        System.out.println("a != b  : " + (a != b));  // not equal
+        System.out.println("a >  b  : " + (a > b));   // greater than
+        System.out.println("a <  b  : " + (a < b));   // less than
+        System.out.println("a >= b  : " + (a >= b));  // greater or equal
+        System.out.println("a <= b  : " + (a <= b));  // less or equal
+
+        // Logical operators
+        boolean t = true, f = false;
+        System.out.println("t && f  : " + (t && f));  // AND → false
+        System.out.println("t || f  : " + (t || f));  // OR  → true
+        System.out.println("!t      : " + (!t));       // NOT → false
+
+        // Bitwise operators (rarely in SDET, but good to know)
+        System.out.println("5 & 3   : " + (5 & 3));   // Bitwise AND  → 1
+        System.out.println("5 | 3   : " + (5 | 3));   // Bitwise OR   → 7
+        System.out.println("5 ^ 3   : " + (5 ^ 3));   // Bitwise XOR  → 6
+        System.out.println("~5      : " + (~5));        // Bitwise NOT  → -6
+        System.out.println("5 << 1  : " + (5 << 1));  // Left shift   → 10
+        System.out.println("5 >> 1  : " + (5 >> 1));  // Right shift  → 2
+
+        // Ternary operator → condition ? valueIfTrue : valueIfFalse
+        int age = 20;
+        String status = (age >= 18) ? "Adult" : "Minor"; // short if-else
+        System.out.println("Ternary status: " + status);
+
+        // instanceof keyword → checks if object is instance of a class
+        String str = "Hello";
+        System.out.println("str instanceof String: " + (str instanceof String)); // true
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 9: CONTROL FLOW
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateControlFlow() {
+        System.out.println("--- SECTION: CONTROL FLOW ---");
+
+        // --- IF / ELSE IF / ELSE ---
+        // 'if'     → checks a condition
+        // 'else if' → another condition if previous was false
+        // 'else'   → runs when all conditions are false
+        int score = 75;
+
+        if (score >= 90) {
+            System.out.println("Grade: A");
+        } else if (score >= 75) {
+            System.out.println("Grade: B");  // ← this runs
+        } else if (score >= 60) {
+            System.out.println("Grade: C");
+        } else {
+            System.out.println("Grade: F");
+        }
+
+        // --- SWITCH STATEMENT (traditional) ---
+        // 'switch'  → selects one block to run based on value
+        // 'case'    → each possible value
+        // 'break'   → exits switch (without it, falls through to next case)
+        // 'default' → runs if no case matches (like else)
+        String browser = "Chrome";
+
+        switch (browser) {
+            case "Chrome":
+                System.out.println("Using ChromeDriver");
+                break;           // ← important: stops here
+            case "Firefox":
+                System.out.println("Using GeckoDriver");
+                break;
+            case "Edge":
+                System.out.println("Using EdgeDriver");
+                break;
+            default:
+                System.out.println("Unknown browser");
+        }
+
+        // --- SWITCH EXPRESSION (Java 14+) → cleaner, no fall-through, returns value ---
+        String driver = switch (browser) {
+            case "Chrome"  -> "ChromeDriver";   // arrow syntax, no break needed
+            case "Firefox" -> "GeckoDriver";
+            case "Edge"    -> "EdgeDriver";
+            default        -> "Unknown";
+        };
+        System.out.println("Driver: " + driver);
+
+        // --- SWITCH with yield (multi-line case block) ---
+        int retryCount = switch (browser) {
+            case "Chrome" -> {
+                System.out.println("Chrome selected");
+                yield 3;  // 'yield' returns value from block
+            }
+            default -> 1;
+        };
+        System.out.println("Retry count: " + retryCount);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 10: LOOPS
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateLoops() {
+        System.out.println("--- SECTION: LOOPS ---");
+
+        // --- FOR LOOP → when number of iterations is known ---
+        // init; condition; update
+        System.out.print("for loop: ");
+        for (int i = 0; i < 5; i++) {
+            System.out.print(i + " ");  // 0 1 2 3 4
+        }
+        System.out.println();
+
+        // --- WHILE LOOP → when condition is checked BEFORE each iteration ---
+        System.out.print("while: ");
+        int w = 0;
+        while (w < 5) {
+            System.out.print(w + " ");
+            w++;
+        }
+        System.out.println();
+
+        // --- DO-WHILE → body runs AT LEAST ONCE, condition checked AFTER ---
+        System.out.print("do-while: ");
+        int d = 0;
+        do {
+            System.out.print(d + " ");
+            d++;
+        } while (d < 5);
+        System.out.println();
+
+        // --- ENHANCED FOR (for-each) → iterates over array/collection ---
+        String[] browsers = {"Chrome", "Firefox", "Edge", "Safari"};
+        System.out.print("for-each: ");
+        for (String b : browsers) {   // reads as "for each String b in browsers"
+            System.out.print(b + " ");
+        }
+        System.out.println();
+
+        // --- BREAK → exits the loop immediately ---
+        System.out.print("break demo: ");
+        for (int i = 0; i < 10; i++) {
+            if (i == 5) break;        // stops loop when i reaches 5
+            System.out.print(i + " ");
+        }
+        System.out.println();
+
+        // --- CONTINUE → skips current iteration, goes to next ---
+        System.out.print("continue demo (skip evens): ");
+        for (int i = 0; i < 10; i++) {
+            if (i % 2 == 0) continue; // skip even numbers
+            System.out.print(i + " ");
+        }
+        System.out.println();
+
+        // --- LABELED BREAK → exits outer loop from inside inner loop ---
+        outer:                        // label marks the outer loop
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i == 1 && j == 1) break outer; // exits both loops
+                System.out.print("[" + i + "," + j + "] ");
+            }
+        }
+        System.out.println("\n");
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 11: ARRAYS
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateArrays() {
+        System.out.println("--- SECTION: ARRAYS ---");
+
+        // Single-dimensional array
+        int[] nums = new int[5];          // declares array of 5 ints (default: 0)
+        nums[0] = 10;
+        nums[1] = 20;
+        int[] nums2 = {1, 2, 3, 4, 5};   // array literal shorthand
+
+        System.out.println("Length: " + nums2.length);         // .length (not a method call)
+        System.out.println("First : " + nums2[0]);             // index starts at 0
+        System.out.println("Last  : " + nums2[nums2.length-1]);
+
+        // 2D Array (matrix)
+        int[][] matrix = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+        System.out.println("matrix[1][2] = " + matrix[1][2]); // row 1, col 2 → 6
+
+        // Array iteration
+        System.out.print("Array: ");
+        for (int n : nums2) System.out.print(n + " ");
+        System.out.println();
+
+        // Sorting
+        int[] unsorted = {5, 2, 8, 1, 9, 3};
+        Arrays.sort(unsorted);                                  // in-place sort
+        System.out.println("Sorted: " + Arrays.toString(unsorted));
+
+        // Copying arrays
+        int[] copy = Arrays.copyOf(nums2, nums2.length);
+        int[] rangeCopy = Arrays.copyOfRange(nums2, 1, 4);     // index 1 to 3
+        System.out.println("Range copy: " + Arrays.toString(rangeCopy)); // [2,3,4]
+
+        // Filling
+        int[] filled = new int[5];
+        Arrays.fill(filled, 7);
+        System.out.println("Filled: " + Arrays.toString(filled));        // [7,7,7,7,7]
+
+        // Array to List (note: fixed-size, not resizable)
+        String[] arr = {"a", "b", "c"};
+        List<String> list = Arrays.asList(arr);
+        System.out.println("Array to List: " + list);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 12: STRINGS (heavily used in SDET)
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateStrings() {
+        System.out.println("--- SECTION: STRINGS ---");
+
+        String s = "  Hello, Selenium World!  ";
+
+        // Common String methods
+        System.out.println("length()         : " + s.length());
+        System.out.println("trim()           : '" + s.trim() + "'");      // removes leading/trailing spaces
+        System.out.println("strip()          : '" + s.strip() + "'");     // Unicode-aware trim (Java 11+)
+        System.out.println("toLowerCase()    : " + s.toLowerCase());
+        System.out.println("toUpperCase()    : " + s.toUpperCase());
+        System.out.println("contains('Selen'): " + s.contains("Selen"));
+        System.out.println("startsWith('  He'): " + s.startsWith("  He"));
+        System.out.println("endsWith('!  ')  : " + s.endsWith("!  "));
+        System.out.println("indexOf('World') : " + s.indexOf("World"));
+        System.out.println("substring(7,13)  : " + s.trim().substring(7, 13));
+        System.out.println("replace('Hello','Hi'): " + s.replace("Hello", "Hi"));
+        System.out.println("replaceAll(regex): " + s.replaceAll("\\s+", "_")); // regex
+
+        // Split - very useful for parsing test data
+        String csv = "Chrome,Firefox,Edge,Safari";
+        String[] parts = csv.split(",");
+        System.out.println("split result[1]: " + parts[1]); // Firefox
+
+        // Join / concat
+        String joined = String.join(" | ", parts);
+        System.out.println("join: " + joined);
+
+        // String.format → build dynamic strings (like in assertions)
+        String msg = String.format("Test %s on %s browser - Status: %d", "Login", "Chrome", 200);
+        System.out.println("format: " + msg);
+
+        // isEmpty() and isBlank()
+        String empty = "";
+        String blank = "   ";
+        System.out.println("empty.isEmpty()  : " + empty.isEmpty());     // true
+        System.out.println("blank.isBlank()  : " + blank.isBlank());     // true  (Java 11+)
+        System.out.println("blank.isEmpty()  : " + blank.isEmpty());     // false
+
+        // charAt - useful for character-level validation
+        System.out.println("charAt(0): " + "Selenium".charAt(0)); // S
+
+        // toCharArray
+        char[] chars = "ABC".toCharArray();
+        System.out.println("toCharArray: " + Arrays.toString(chars));
+
+        // String comparison (always use equals, never ==)
+        String a = "hello", b = "HELLO";
+        System.out.println("equals          : " + a.equals(b));               // false
+        System.out.println("equalsIgnoreCase: " + a.equalsIgnoreCase(b));     // true
+        System.out.println("compareTo       : " + a.compareTo(b));            // positive (a > b lexically)
+
+        // StringBuilder → mutable string, better for concatenation in loops
+        StringBuilder sb = new StringBuilder();
+        sb.append("Test");
+        sb.append("Automation");
+        sb.insert(4, " ");                // insert space at index 4
+        sb.replace(5, 15, "SDET");        // replace range
+        sb.reverse();
+        System.out.println("StringBuilder: " + sb.toString());
+
+        // StringBuffer → same as StringBuilder but thread-safe (synchronized)
+        StringBuffer sbuf = new StringBuffer("Thread");
+        sbuf.append("Safe");
+        System.out.println("StringBuffer: " + sbuf);
+
+        // String.valueOf → convert primitives to String
+        System.out.println("valueOf(42)   : " + String.valueOf(42));
+        System.out.println("valueOf(true) : " + String.valueOf(true));
+
+        // Integer.parseInt → convert String to int
+        int num = Integer.parseInt("123");
+        System.out.println("parseInt: " + num);
+
+        // Text Block (Java 15+) → multiline strings without \n
+        String html = """
+                <html>
+                    <body>
+                        <p>Hello SDET</p>
+                    </body>
+                </html>
+                """;
+        System.out.println("Text Block:\n" + html);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 13: OOP — OBJECT-ORIENTED PROGRAMMING
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateOOP() {
+        System.out.println("--- SECTION: OOP ---");
+
+        // --- 1. CLASS & OBJECT ---
+        // Creating objects with 'new' keyword
+        Animal dog = new Animal("Dog", "Buddy", 3);
+        dog.speak();
+        System.out.println("Name: " + dog.getName() + ", Age: " + dog.getAge());
+
+        // --- 2. INHERITANCE → 'extends' ---
+        // Dog inherits from Animal, adds/overrides behavior
+        Dog rex = new Dog("Rex", 5);
+        rex.speak();       // overridden method (polymorphism)
+        rex.fetch();       // Dog-specific method
+
+        // --- 3. POLYMORPHISM → same reference type, different behavior ---
+        Animal polyAnimal = new Dog("Poly", 2); // Animal reference → Dog object
+        polyAnimal.speak();                      // calls Dog's speak() at runtime
+        // polyAnimal.fetch(); ← compile error: Animal doesn't have fetch()
+
+        // --- 4. INTERFACE USAGE ---
+        Drivable car = new Car("Tesla", "Model 3");
+        car.drive();
+        car.stop();
+
+        // --- 5. ABSTRACT CLASS USAGE ---
+        Shape circle = new Circle(5.0);
+        System.out.println("Circle area: " + circle.calculateArea());
+        circle.describe(); // concrete method from abstract class
+
+        // --- 6. THIS keyword → refers to current object ---
+        //     SUPER keyword → refers to parent class
+        // (shown inside class definitions below)
+
+        // --- 7. INSTANCEOF keyword ---
+        System.out.println("rex instanceof Dog   : " + (rex instanceof Dog));    // true
+        System.out.println("rex instanceof Animal: " + (rex instanceof Animal)); // true (Dog IS-A Animal)
+
+        // Pattern matching instanceof (Java 16+)
+        Object obj = "Hello SDET";
+        if (obj instanceof String str2) {    // casts & declares in one step
+            System.out.println("Pattern match str length: " + str2.length());
+        }
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 14: COLLECTIONS FRAMEWORK
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateCollections() {
+        System.out.println("--- SECTION: COLLECTIONS ---");
+
+        // ── ArrayList → ordered, resizable, allows duplicates, null ──
+        List<String> arrayList = new ArrayList<>();
+        arrayList.add("Chrome");
+        arrayList.add("Firefox");
+        arrayList.add("Edge");
+        arrayList.add("Chrome");           // duplicates allowed
+        arrayList.add(1, "Safari");        // insert at index
+        System.out.println("ArrayList        : " + arrayList);
+        System.out.println("get(0)           : " + arrayList.get(0));
+        System.out.println("size()           : " + arrayList.size());
+        System.out.println("contains('Edge') : " + arrayList.contains("Edge"));
+        arrayList.remove("Safari");        // remove by value
+        arrayList.remove(0);               // remove by index
+        System.out.println("After removes    : " + arrayList);
+        Collections.sort(arrayList);       // sort alphabetically
+        System.out.println("Sorted           : " + arrayList);
+
+        // ── LinkedList → doubly-linked list, good for frequent insert/delete ──
+        LinkedList<String> linkedList = new LinkedList<>();
+        linkedList.add("First");
+        linkedList.addFirst("Zero");       // add to front
+        linkedList.addLast("Last");        // add to end
+        System.out.println("LinkedList       : " + linkedList);
+        System.out.println("peek (no remove) : " + linkedList.peek());
+        System.out.println("poll (removes)   : " + linkedList.poll());
+
+        // ── Queue → FIFO (First In, First Out) ──
+        Queue<String> queue = new LinkedList<>();
+        queue.offer("Task1");              // add to queue
+        queue.offer("Task2");
+        queue.offer("Task3");
+        System.out.println("Queue peek: " + queue.peek());   // look at front
+        System.out.println("Queue poll: " + queue.poll());   // remove from front
+        System.out.println("Queue now : " + queue);
+
+        // ── Stack → LIFO (Last In, First Out) ──
+        // Use Deque<String> stack = new ArrayDeque<>() → preferred over Stack class
+        Deque<String> stack = new ArrayDeque<>();
+        stack.push("Step1");              // push to top
+        stack.push("Step2");
+        stack.push("Step3");
+        System.out.println("Stack peek: " + stack.peek());   // look at top
+        System.out.println("Stack pop : " + stack.pop());    // remove from top
+        System.out.println("Stack now : " + stack);
+
+        // ── HashSet → unordered, NO duplicates ──
+        Set<String> hashSet = new HashSet<>();
+        hashSet.add("Selenium");
+        hashSet.add("TestNG");
+        hashSet.add("Selenium");           // duplicate → ignored
+        hashSet.add("JUnit");
+        System.out.println("HashSet (no order, no dupes): " + hashSet);
+
+        // ── LinkedHashSet → preserves insertion order, no duplicates ──
+        Set<String> linkedSet = new LinkedHashSet<>();
+        linkedSet.add("C"); linkedSet.add("A"); linkedSet.add("B");
+        System.out.println("LinkedHashSet (ordered): " + linkedSet);
+
+        // ── TreeSet → sorted natural order, no duplicates ──
+        Set<Integer> treeSet = new TreeSet<>();
+        treeSet.add(5); treeSet.add(1); treeSet.add(3);
+        System.out.println("TreeSet (sorted): " + treeSet);
+
+        // ── HashMap → key-value pairs, unordered, one null key ──
+        Map<String, String> hashMap = new HashMap<>();
+        hashMap.put("url",      "https://example.com");
+        hashMap.put("username", "admin");
+        hashMap.put("password", "secret");
+        hashMap.put("username", "root");   // key overwritten, not duplicated
+        System.out.println("HashMap              : " + hashMap);
+        System.out.println("get('url')           : " + hashMap.get("url"));
+        System.out.println("getOrDefault         : " + hashMap.getOrDefault("browser", "Chrome"));
+        System.out.println("containsKey('url')   : " + hashMap.containsKey("url"));
+        System.out.println("containsValue('root'): " + hashMap.containsValue("root"));
+
+        // Iterate map entries
+        System.out.print("Map entries: ");
+        for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+            System.out.print(entry.getKey() + "=" + entry.getValue() + " | ");
+        }
+        System.out.println();
+
+        // ── LinkedHashMap → preserves insertion order ──
+        Map<String, Integer> linkedMap = new LinkedHashMap<>();
+        linkedMap.put("Step1", 1);
+        linkedMap.put("Step2", 2);
+        linkedMap.put("Step3", 3);
+        System.out.println("LinkedHashMap: " + linkedMap);
+
+        // ── TreeMap → sorted by keys ──
+        Map<String, Integer> treeMap = new TreeMap<>();
+        treeMap.put("Banana", 2); treeMap.put("Apple", 1); treeMap.put("Cherry", 3);
+        System.out.println("TreeMap (sorted keys): " + treeMap);
+
+        // ── Collections utility methods ──
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(3,1,4,1,5,9,2,6));
+        System.out.println("max : " + Collections.max(numbers));
+        System.out.println("min : " + Collections.min(numbers));
+        Collections.sort(numbers);
+        System.out.println("sort: " + numbers);
+        Collections.reverse(numbers);
+        System.out.println("rev : " + numbers);
+        Collections.shuffle(numbers);
+        System.out.println("shuffle: " + numbers);
+        System.out.println("freq of 1: " + Collections.frequency(numbers, 1));
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 15: EXCEPTION HANDLING
+    // ─────────────────────────────────────────────────────────
+    // try     → block that might throw an exception
+    // catch   → handles the exception (can have multiple)
+    // finally → ALWAYS runs (cleanup: close files, drivers, etc.)
+    // throw   → manually throw an exception
+    // throws  → declares exceptions a method might throw
+    static void demonstrateExceptionHandling() {
+        System.out.println("--- SECTION: EXCEPTION HANDLING ---");
+
+        // --- Basic try-catch-finally ---
+        try {
+            int result = 10 / 0;             // ArithmeticException
+            System.out.println(result);
+        } catch (ArithmeticException e) {
+            System.out.println("Caught: " + e.getMessage()); // / by zero
+        } finally {
+            System.out.println("finally always runs (e.g., close WebDriver)");
+        }
+
+        // --- Multiple catch blocks (most specific first!) ---
+        try {
+            String s = null;
+            s.length();                      // NullPointerException
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer: " + e.getClass().getSimpleName());
+        } catch (Exception e) {              // parent catches rest
+            System.out.println("General: " + e.getMessage());
+        }
+
+        // --- Multi-catch (Java 7+) → handle multiple types in one catch ---
+        try {
+            int[] arr = new int[3];
+            arr[10] = 5;                     // ArrayIndexOutOfBoundsException
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            System.out.println("Multi-catch: " + e.getClass().getSimpleName());
+        }
+
+        // --- Try-with-resources (Java 7+) → auto-closes Closeable resources ---
+        // No need for explicit finally → resource.close()
+        try (StringReader reader = new StringReader("test data")) {
+            System.out.println("Try-with-resources: auto-closed after block");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // --- throw keyword → manually throw exception ---
+        try {
+            validateAge(-5);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Custom throw: " + e.getMessage());
+        }
+
+        // --- Custom exception ---
+        try {
+            throw new TestFailedException("Element not found on page");
+        } catch (TestFailedException e) {
+            System.out.println("Custom exception: " + e.getMessage());
+        }
+
+        // --- Exception hierarchy ---
+        // Throwable
+        //   ├── Error          (JVM issues: OutOfMemoryError → don't catch these)
+        //   └── Exception
+        //         ├── Checked Exceptions (must declare or catch: IOException, SQLException)
+        //         └── RuntimeException  (unchecked: NullPointer, ArrayIndex, ClassCast)
+
+        System.out.println();
+    }
+
+    // Method that declares it throws → caller must handle
+    static void validateAge(int age) throws IllegalArgumentException {
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative: " + age);
+        }
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 16: GENERICS
+    // ─────────────────────────────────────────────────────────
+    // <T> = type parameter → write one class/method for any type
+    // Prevents ClassCastException, gives compile-time type safety
+    static void demonstrateGenerics() {
+        System.out.println("--- SECTION: GENERICS ---");
+
+        GenericBox<String>  strBox  = new GenericBox<>("Selenium");
+        GenericBox<Integer> intBox  = new GenericBox<>(42);
+        GenericBox<Boolean> boolBox = new GenericBox<>(true);
+
+        System.out.println("String box : " + strBox.getValue());
+        System.out.println("Integer box: " + intBox.getValue());
+        System.out.println("Boolean box: " + boolBox.getValue());
+
+        // Generic method
+        System.out.println("Generic swap: " + genericPrint("Hello"));
+        System.out.println("Generic swap: " + genericPrint(100));
+
+        // Bounded type parameter → <T extends Number>
+        System.out.println("Sum: " + sumList(Arrays.asList(1, 2, 3, 4, 5)));
+
+        // Wildcard <?> → unknown type
+        List<Integer> ints = Arrays.asList(1, 2, 3);
+        printList(ints);  // works with any list type
+
+        System.out.println();
+    }
+
+    // <T> before return type declares T as type parameter
+    static <T> T genericPrint(T value) {
+        System.out.print("Type: " + value.getClass().getSimpleName() + " → ");
+        return value;
+    }
+
+    // <T extends Number> → T must be Number or its subclass
+    static <T extends Number> double sumList(List<T> list) {
+        double sum = 0;
+        for (T item : list) sum += item.doubleValue();
+        return sum;
+    }
+
+    // <?> wildcard → accepts List of any type (read-only)
+    static void printList(List<?> list) {
+        System.out.print("Wildcard list: ");
+        for (Object item : list) System.out.print(item + " ");
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 17: STREAM API (Java 8+) — KEY FOR SDET
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateStreamAPI() {
+        System.out.println("--- SECTION: STREAM API ---");
+
+        List<String> tests = Arrays.asList(
+                "TC001_Login", "TC002_Logout", "TC003_Search",
+                "TC004_Login_Negative", "TC005_Checkout"
+        );
+
+        // filter()  → keep elements matching predicate
+        // map()     → transform each element
+        // collect() → gather result into collection
+        List<String> loginTests = tests.stream()
+                .filter(t -> t.contains("Login"))          // keep only login tests
+                .map(String::toUpperCase)                  // transform to uppercase
+                .collect(Collectors.toList());             // collect to List
+        System.out.println("Login tests   : " + loginTests);
+
+        // forEach() → perform action on each element
+        System.out.print("forEach       : ");
+        tests.stream().forEach(t -> System.out.print(t + " "));
+        System.out.println();
+
+        // count() → count elements
+        long count = tests.stream().filter(t -> t.startsWith("TC00")).count();
+        System.out.println("count TC00x   : " + count);
+
+        // sorted() → sort elements
+        List<String> sorted = tests.stream().sorted().collect(Collectors.toList());
+        System.out.println("sorted        : " + sorted);
+
+        // distinct() → remove duplicates
+        List<Integer> nums = Arrays.asList(1,2,2,3,3,4);
+        List<Integer> distinct = nums.stream().distinct().collect(Collectors.toList());
+        System.out.println("distinct      : " + distinct);
+
+        // limit() / skip()
+        List<String> limited = tests.stream().limit(3).collect(Collectors.toList());
+        System.out.println("limit(3)      : " + limited);
+        List<String> skipped = tests.stream().skip(2).collect(Collectors.toList());
+        System.out.println("skip(2)       : " + skipped);
+
+        // findFirst() / findAny() → returns Optional
+        Optional<String> first = tests.stream().filter(t -> t.contains("Search")).findFirst();
+        System.out.println("findFirst     : " + first.orElse("Not found"));
+
+        // anyMatch / allMatch / noneMatch → return boolean
+        boolean any  = tests.stream().anyMatch(t -> t.contains("Logout"));
+        boolean all  = tests.stream().allMatch(t -> t.startsWith("TC"));
+        boolean none = tests.stream().noneMatch(t -> t.contains("Delete"));
+        System.out.println("anyMatch(Logout): " + any);
+        System.out.println("allMatch(TC)    : " + all);
+        System.out.println("noneMatch(Delete): " + none);
+
+        // reduce() → combine all elements into one result
+        int sum = Stream.of(1,2,3,4,5).reduce(0, Integer::sum);
+        System.out.println("reduce sum    : " + sum);
+
+        // mapToInt / mapToDouble → specialized streams with math operations
+        OptionalDouble avg = Stream.of(70, 80, 90, 100)
+                .mapToInt(Integer::intValue).average();
+        System.out.println("average score : " + avg.getAsDouble());
+
+        // Collectors.joining → concatenate strings
+        String joined = tests.stream().collect(Collectors.joining(", "));
+        System.out.println("joining       : " + joined);
+
+        // Collectors.groupingBy → group elements by key
+        Map<Boolean, List<String>> grouped = tests.stream()
+                .collect(Collectors.partitioningBy(t -> t.contains("Login")));
+        System.out.println("login group   : " + grouped.get(true));
+        System.out.println("other group   : " + grouped.get(false));
+
+        // flatMap() → flatten nested collections
+        List<List<String>> nested = Arrays.asList(
+                Arrays.asList("a", "b"), Arrays.asList("c", "d")
+        );
+        List<String> flat = nested.stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        System.out.println("flatMap       : " + flat);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 18: LAMBDA EXPRESSIONS (Java 8+)
+    // ─────────────────────────────────────────────────────────
+    // Lambdas = anonymous functions (no name, no class)
+    // Syntax: (parameters) -> expression  OR  (parameters) -> { body }
+    static void demonstrateLambdas() {
+        System.out.println("--- SECTION: LAMBDAS ---");
+
+        // No params, no return
+        Runnable r = () -> System.out.println("Lambda Runnable running!");
+        r.run();
+
+        // One param, no parentheses needed
+        Predicate<String> isEmpty = s -> s.isEmpty();
+        System.out.println("isEmpty(''): " + isEmpty.test(""));
+
+        // Two params, with return
+        Comparator<String> byLength = (a, b) -> a.length() - b.length();
+        List<String> words = new ArrayList<>(Arrays.asList("Selenium", "API", "TestNG"));
+        words.sort(byLength);
+        System.out.println("Sorted by length: " + words);
+
+        // Block body lambda (multiple statements)
+        Runnable multiLine = () -> {
+            String msg = "Multi-line";
+            System.out.println("Lambda: " + msg + " lambda!");
+        };
+        multiLine.run();
+
+        // ── Method References (shorthand for lambdas) ──
+        // Type                 | Syntax              | Equivalent Lambda
+        // Static method        | Class::method       | x -> Class.method(x)
+        // Instance method      | instance::method    | x -> instance.method(x)
+        // Instance (any obj)   | Class::method       | (x,y) -> x.method(y)
+        // Constructor          | Class::new          | () -> new Class()
+
+        List<String> items = Arrays.asList("Selenium", "Java", "TestNG");
+
+        // Static method reference
+        items.forEach(System.out::println);
+
+        // Instance method reference (any object of type)
+        items.stream().map(String::toUpperCase).forEach(System.out::println);
+
+        // Constructor reference
+        Supplier<ArrayList> listFactory = ArrayList::new;
+        ArrayList newList = listFactory.get();
+        System.out.println("Constructor ref list: " + newList.getClass().getSimpleName());
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 19: FUNCTIONAL INTERFACES (Java 8+)
+    // ─────────────────────────────────────────────────────────
+    // @FunctionalInterface → exactly ONE abstract method
+    // Enables lambda expressions
+    static void demonstrateFunctionalInterfaces() {
+        System.out.println("--- SECTION: FUNCTIONAL INTERFACES ---");
+
+        // Predicate<T>   → takes T, returns boolean → used for filtering
+        Predicate<String> isLong = s -> s.length() > 5;
+        System.out.println("Predicate isLong('Selenium'): " + isLong.test("Selenium")); // true
+        System.out.println("Predicate isLong('Java')    : " + isLong.test("Java"));     // false
+
+        // Predicate chaining
+        Predicate<String> startsWithS = s -> s.startsWith("S");
+        Predicate<String> combined    = isLong.and(startsWithS);    // AND
+        Predicate<String> either      = isLong.or(startsWithS);     // OR
+        Predicate<String> notLong     = isLong.negate();            // NOT
+        System.out.println("and (Selenium): " + combined.test("Selenium")); // true
+        System.out.println("or  (Sam)     : " + either.test("Sam"));        // true
+        System.out.println("negate(Java)  : " + notLong.test("Java"));      // true
+
+        // Function<T,R>  → takes T, returns R → transformation/mapping
+        Function<String, Integer> strLen = String::length;
+        Function<Integer, String> intStr = i -> "Number: " + i;
+        System.out.println("Function len  : " + strLen.apply("Selenium")); // 8
+        System.out.println("Function andThen: " + strLen.andThen(intStr).apply("Selenium"));
+
+        // Consumer<T>    → takes T, returns nothing → side effects (printing, saving)
+        Consumer<String> printer = System.out::println;
+        Consumer<String> shouter = s -> System.out.println(s.toUpperCase());
+        printer.accept("Consumer: hello");
+        printer.andThen(shouter).accept("chained");   // runs both
+
+        // Supplier<T>    → takes nothing, returns T → factory/lazy evaluation
+        Supplier<String> greeting = () -> "Hello from Supplier!";
+        System.out.println(greeting.get());
+
+        // BiFunction<T,U,R> → takes two inputs, returns one output
+        java.util.function.BiFunction<String, Integer, String> repeat =
+                (s, n) -> s.repeat(n);
+        System.out.println("BiFunction: " + repeat.apply("Ha", 3)); // HaHaHa
+
+        // Custom functional interface (see SDETAction below)
+        SDETAction clickAction = (element, timeout) ->
+                System.out.println("Clicking " + element + " with timeout " + timeout + "s");
+        clickAction.perform("loginButton", 10);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 20: MULTITHREADING
+    // ─────────────────────────────────────────────────────────
+    // 'synchronized' → only ONE thread can enter at a time
+    // 'volatile'     → variable always read from main memory (not cache)
+    // 'Thread'       → represents a unit of execution
+    // 'Runnable'     → functional interface for thread task
+    static void demonstrateMultithreading() {
+        System.out.println("--- SECTION: MULTITHREADING ---");
+
+        // Way 1: Extend Thread class
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                System.out.println("Thread by extending: " + Thread.currentThread().getName());
+            }
+        };
+        t1.start();  // start() creates new thread; never call run() directly
+
+        // Way 2: Implement Runnable (preferred)
+        Runnable task = () -> System.out.println("Runnable thread: " + Thread.currentThread().getName());
+        Thread t2 = new Thread(task, "Worker-1");
+        t2.start();
+
+        // Wait for threads to finish
+        try {
+            t1.join();  // main thread waits for t1 to complete
+            t2.join();  // main thread waits for t2 to complete
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // restore interrupted status
+        }
+
+        // Thread properties
+        System.out.println("Main thread: "     + Thread.currentThread().getName());
+        System.out.println("Thread priority: " + Thread.currentThread().getPriority()); // 1-10
+        System.out.println("Is daemon: "       + Thread.currentThread().isDaemon());
+
+        // Thread states: NEW → RUNNABLE → BLOCKED/WAITING/TIMED_WAITING → TERMINATED
+        Thread t3 = new Thread(() -> {});
+        System.out.println("Before start: " + t3.getState()); // NEW
+        t3.start();
+        System.out.println("After start : " + t3.getState()); // RUNNABLE or TERMINATED
+
+        // ExecutorService → thread pool (better than raw threads in production)
+        java.util.concurrent.ExecutorService executor =
+                java.util.concurrent.Executors.newFixedThreadPool(3);
+
+        for (int i = 1; i <= 3; i++) {
+            final int taskNum = i;
+            executor.submit(() ->
+                    System.out.println("Pool thread executing task " + taskNum + " on " +
+                            Thread.currentThread().getName()));
+        }
+        executor.shutdown(); // no new tasks; waits for running ones to finish
+
+        // synchronized counter example
+        Counter counter = new Counter();
+        Thread inc1 = new Thread(() -> { for(int i=0;i<100;i++) counter.increment(); });
+        Thread inc2 = new Thread(() -> { for(int i=0;i<100;i++) counter.increment(); });
+        inc1.start(); inc2.start();
+        try { inc1.join(); inc2.join(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        System.out.println("Synchronized counter (expected 200): " + counter.getCount());
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 21: FILE I/O
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateFileIO() {
+        System.out.println("--- SECTION: FILE I/O ---");
+
+        String path = "test_data.txt";
+
+        // Write to file
+        try (FileWriter fw = new FileWriter(path);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write("testcase=Login");
+            bw.newLine();
+            bw.write("testcase=Search");
+            bw.newLine();
+            bw.write("testcase=Logout");
+            System.out.println("File written: " + path);
+        } catch (IOException e) {
+            System.out.println("Write error: " + e.getMessage());
+        }
+
+        // Read from file
+        try (FileReader fr = new FileReader(path);
+             BufferedReader br = new BufferedReader(fr)) {
+            String line;
+            System.out.println("File contents:");
+            while ((line = br.readLine()) != null) {  // null when file ends
+                System.out.println("  " + line);
+            }
+        } catch (IOException e) {
+            System.out.println("Read error: " + e.getMessage());
+        }
+
+        // File operations
+        java.io.File file = new java.io.File(path);
+        System.out.println("Exists     : " + file.exists());
+        System.out.println("Size(bytes): " + file.length());
+        System.out.println("Readable   : " + file.canRead());
+        System.out.println("Writable   : " + file.canWrite());
+        file.delete();
+        System.out.println("Deleted    : " + !file.exists());
+
+        // Modern way: java.nio.file.Files (Java 7+)
+        java.nio.file.Path nioPath = java.nio.file.Paths.get("nio_test.txt");
+        try {
+            java.nio.file.Files.writeString(nioPath, "NIO content\nLine 2");
+            String content = java.nio.file.Files.readString(nioPath);
+            System.out.println("NIO read: " + content.replace("\n", " | "));
+            java.nio.file.Files.delete(nioPath);
+        } catch (IOException e) {
+            System.out.println("NIO error: " + e.getMessage());
+        }
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 22: ENUMS
+    // ─────────────────────────────────────────────────────────
+    // enum → special class with fixed set of constants
+    // Perfect for: test status, browser type, environment, priority
+    static void demonstrateEnums() {
+        System.out.println("--- SECTION: ENUMS ---");
+
+        // Basic usage
+        TestStatus status = TestStatus.PASSED;
+        System.out.println("Status      : " + status);
+        System.out.println("name()      : " + status.name());    // "PASSED"
+        System.out.println("ordinal()   : " + status.ordinal()); // 0 (index)
+
+        // Enum with switch
+        switch (status) {
+            case PASSED  -> System.out.println("✓ Test Passed");
+            case FAILED  -> System.out.println("✗ Test Failed");
+            case SKIPPED -> System.out.println("- Test Skipped");
+            case PENDING -> System.out.println("? Test Pending");
+        }
+
+        // Enum with constructor and method
+        Browser browser = Browser.CHROME;
+        System.out.println("Browser driver: " + browser.getDriver());
+        System.out.println("Browser version: " + browser.getVersion());
+
+        // values() → all enum constants
+        System.out.print("All statuses: ");
+        for (TestStatus s : TestStatus.values()) System.out.print(s + " ");
+        System.out.println();
+
+        // valueOf() → string to enum
+        TestStatus fromStr = TestStatus.valueOf("FAILED");
+        System.out.println("valueOf: " + fromStr);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 23: OPTIONAL (Java 8+)
+    // ─────────────────────────────────────────────────────────
+    // Optional<T> → container that may or may not have a value
+    // Avoids NullPointerException cleanly
+    static void demonstrateOptional() {
+        System.out.println("--- SECTION: OPTIONAL ---");
+
+        // Creating Optional
+        Optional<String> present = Optional.of("Selenium");         // non-null value
+        Optional<String> empty   = Optional.empty();                // no value
+        Optional<String> nullable = Optional.ofNullable(null);      // might be null
+
+        System.out.println("isPresent : " + present.isPresent());   // true
+        System.out.println("isEmpty   : " + empty.isEmpty());       // true (Java 11+)
+        System.out.println("get       : " + present.get());         // Selenium
+
+        // Safe retrieval
+        System.out.println("orElse    : " + empty.orElse("default"));
+        System.out.println("orElseGet : " + empty.orElseGet(() -> "supplier value"));
+
+        // orElseThrow
+        try {
+            empty.orElseThrow(() -> new RuntimeException("Value missing"));
+        } catch (RuntimeException e) {
+            System.out.println("orElseThrow: " + e.getMessage());
+        }
+
+        // map / filter / flatMap on Optional
+        Optional<Integer> len = present.map(String::length);
+        System.out.println("map length: " + len.orElse(0)); // 8
+
+        Optional<String> filtered = present.filter(s -> s.length() > 5);
+        System.out.println("filter    : " + filtered.orElse("filtered out"));
+
+        // if present → run action
+        present.ifPresent(s -> System.out.println("ifPresent: " + s));
+        present.ifPresentOrElse(
+                s -> System.out.println("ifPresentOrElse present: " + s),
+                ()  -> System.out.println("ifPresentOrElse empty")
+        );
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 24: VAR KEYWORD (Java 10+)
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateVarKeyword() {
+        System.out.println("--- SECTION: VAR KEYWORD ---");
+
+        var url     = "https://example.com";    // String
+        var timeout = 30;                        // int
+        var tests   = new ArrayList<String>();  // ArrayList<String>
+
+        tests.add("Test1"); tests.add("Test2");
+
+        var count = tests.size();               // int
+
+        System.out.println("url     : " + url);
+        System.out.println("timeout : " + timeout);
+        System.out.println("tests   : " + tests);
+        System.out.println("count   : " + count);
+
+        // var in for loop
+        for (var test : tests) {
+            System.out.println("  var loop: " + test);
+        }
+
+        // var CANNOT be used for: class fields, method params, return types, or null
+        // var x = null;    ← compile error (can't infer type from null)
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 25: TYPECASTING & WRAPPER CLASSES
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateTypecastingAndWrappers() {
+        System.out.println("--- SECTION: TYPECASTING & WRAPPERS ---");
+
+        // --- Widening (implicit) → smaller to larger, no data loss ---
+        int    i   = 100;
+        long   l   = i;      // int → long automatically
+        double d   = l;      // long → double automatically
+        System.out.println("Widening: " + i + " → " + l + " → " + d);
+
+        // --- Narrowing (explicit) → larger to smaller, may lose data ---
+        double pi   = 3.14159;
+        int    piInt = (int) pi;    // (int) is the cast operator → truncates decimal
+        System.out.println("Narrowing: " + pi + " → " + piInt);
+
+        // --- Object casting ---
+        Animal a  = new Dog("Buddy", 3);    // upcasting (implicit) - safe always
+        Dog    dog = (Dog) a;               // downcasting (explicit) - check first!
+        System.out.println("Downcasted: " + dog.getName());
+
+        // Safe downcasting with instanceof
+        if (a instanceof Dog d2) {          // pattern matching (Java 16+)
+            System.out.println("Safe downcast: " + d2.getName());
+        }
+
+        // --- Autoboxing/Unboxing → primitive ↔ wrapper object ---
+        // Wrapper classes: Byte, Short, Integer, Long, Float, Double, Character, Boolean
+        int primitive    = 42;
+        Integer boxed    = primitive;   // autoboxing:   int → Integer
+        int unboxed      = boxed;       // unboxing: Integer → int
+
+        System.out.println("Autoboxed : " + boxed);
+        System.out.println("Unboxed   : " + unboxed);
+
+        // Wrapper class methods (useful for parsing)
+        System.out.println("parseInt    : " + Integer.parseInt("123"));
+        System.out.println("parseDouble : " + Double.parseDouble("3.14"));
+        System.out.println("MAX_VALUE   : " + Integer.MAX_VALUE);          // 2,147,483,647
+        System.out.println("MIN_VALUE   : " + Integer.MIN_VALUE);          // -2,147,483,648
+        System.out.println("toBinaryStr : " + Integer.toBinaryString(10)); // 1010
+        System.out.println("toHexString : " + Integer.toHexString(255));   // ff
+        System.out.println("toString(42): " + Integer.toString(42));
+        System.out.println("compare     : " + Integer.compare(5, 10));     // negative (5 < 10)
+
+        // Character wrapper
+        System.out.println("isDigit('5')  : " + Character.isDigit('5'));
+        System.out.println("isLetter('a') : " + Character.isLetter('a'));
+        System.out.println("isUpper('A')  : " + Character.isUpperCase('A'));
+        System.out.println("toUpper('a')  : " + Character.toUpperCase('a'));
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 26: STATIC vs INSTANCE
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateStaticAndInstance() {
+        System.out.println("--- SECTION: STATIC vs INSTANCE ---");
+
+        // static members → belong to CLASS (shared by all objects)
+        System.out.println("Static counter before: " + Counter.getCount());
+        Counter c1 = new Counter(); c1.increment();
+        Counter c2 = new Counter(); c2.increment(); c2.increment();
+        // count is shared → both c1 and c2 increment the SAME counter
+        System.out.println("Static counter after : " + Counter.getCount());
+
+        // Instance members → belong to each OBJECT
+        Animal a1 = new Animal("Cat", "Whiskers", 2);
+        Animal a2 = new Animal("Dog", "Rex", 4);
+        System.out.println("Instance a1 name: " + a1.getName()); // Whiskers
+        System.out.println("Instance a2 name: " + a2.getName()); // Rex (different objects)
+
+        // Static utility method → called on class, not object
+        System.out.println("Static method: " + MathUtils.add(3, 4));
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 27: INNER CLASSES
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateInnerClasses() {
+        System.out.println("--- SECTION: INNER CLASSES ---");
+
+        // 1. Non-static inner class → needs outer class instance
+        Outer outer = new Outer("Outer data");
+        Outer.Inner inner = outer.new Inner();  // note: outer.new
+        inner.display();
+
+        // 2. Static nested class → no outer instance needed
+        Outer.StaticNested nested = new Outer.StaticNested();
+        nested.show();
+
+        // 3. Local class → defined inside a method
+        class LocalValidator {
+            boolean isValid(String email) { return email.contains("@"); }
+        }
+        LocalValidator v = new LocalValidator();
+        System.out.println("Local class valid: " + v.isValid("test@test.com"));
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 28: ANONYMOUS CLASS
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateAnonymousClass() {
+        System.out.println("--- SECTION: ANONYMOUS CLASS ---");
+
+        // Anonymous class → implements interface or extends class
+        // inline, one-time use, no name
+        Runnable anon = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Anonymous Runnable executed!");
+            }
+        };
+        anon.run();
+
+        // Anonymous Comparator (before lambdas existed)
+        Comparator<String> lengthComp = new Comparator<String>() {
+            @Override
+            public int compare(String a, String b) {
+                return Integer.compare(a.length(), b.length());
+            }
+        };
+        List<String> words = new ArrayList<>(Arrays.asList("Selenium", "Java", "API"));
+        words.sort(lengthComp);
+        System.out.println("Anonymous comparator: " + words);
+
+        System.out.println();
+    }
+
+
+    // ─────────────────────────────────────────────────────────
+    // SECTION 29: SDET-SPECIFIC PATTERNS
+    // ─────────────────────────────────────────────────────────
+    static void demonstrateSDETPatterns() {
+        System.out.println("--- SECTION: SDET PATTERNS ---");
+
+        // --- Page Object Model pattern (simplified) ---
+        LoginPage loginPage = new LoginPage("https://app.example.com");
+        loginPage.navigate();
+        loginPage.enterCredentials("admin", "password");
+        loginPage.clickLogin();
+
+        // --- Builder Pattern → used in test data builders ---
+        TestUser user = new TestUser.Builder()
+                .username("testuser")
+                .password("pass123")
+                .email("test@test.com")
+                .role("ADMIN")
+                .build();
+        System.out.println("Builder: " + user);
+
+        // --- Singleton Pattern → used for WebDriver, config ---
+        Config config1 = Config.getInstance();
+        Config config2 = Config.getInstance();
+        System.out.println("Singleton same: " + (config1 == config2)); // true
+
+        // --- Factory Pattern → creating drivers by type ---
+        TestEnvironment env = EnvironmentFactory.create("QA");
+        System.out.println("Factory env: " + env.getBaseUrl());
+
+        // --- Data-driven test simulation ---
+        List<Map<String, String>> testData = getTestData();
+        testData.forEach(data -> {
+            System.out.println("Running test with: " + data);
+        });
+
+        // --- Retry logic (common in flaky test handling) ---
+        boolean result = retryOperation(3, () -> {
+            System.out.println("  Attempting operation...");
+            return true; // simulate success
+        });
+        System.out.println("Retry result: " + result);
+
+        System.out.println();
+    }
+
+    static List<Map<String, String>> getTestData() {
+        List<Map<String, String>> data = new ArrayList<>();
+        String[][] raw = {
+                {"user", "admin",   "pass", "admin123"},
+                {"user", "viewer",  "pass", "view123"},
+                {"user", "tester",  "pass", "test123"}
+        };
+        for (String[] row : raw) {
+            Map<String, String> map = new LinkedHashMap<>();
+            map.put(row[0], row[1]);
+            map.put(row[2], row[3]);
+            data.add(map);
+        }
+        return data;
+    }
+
+    // Generic retry method using Supplier
+    static boolean retryOperation(int maxAttempts, Supplier<Boolean> operation) {
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                if (operation.get()) return true;
+            } catch (Exception e) {
+                System.out.println("  Attempt " + attempt + " failed: " + e.getMessage());
+                if (attempt == maxAttempts) throw e;
+            }
+        }
+        return false;
+    }
+
+
+    // ════════════════════════════════════════════════════════
+    //  SUPPORTING CLASSES, INTERFACES, ENUMS (all in one file)
+    // ════════════════════════════════════════════════════════
+
+
+    // ── INTERFACES ─────────────────────────────────────────
+    // 'interface' → pure contract: what a class CAN DO (no state)
+    // All methods are implicitly public abstract (unless default/static)
+    // Java 8+: default and static methods allowed
+    interface Drivable {
+        void drive();       // abstract → must be implemented
+        void stop();        // abstract
+
+        // 'default' → has implementation, can be overridden
+        default void honk() {
+            System.out.println("Honk honk!");
+        }
+
+        // 'static' → belongs to interface, not implementing class
+        static Drivable createCar() {
+            return new Car("Generic", "Model");
+        }
+    }
+
+    interface Chargeable {
+        void charge();
+    }
+
+    // ── ABSTRACT CLASS ─────────────────────────────────────
+    // 'abstract class' → partially implemented; cannot instantiate
+    // Can have constructors, fields, concrete methods, abstract methods
+    abstract static class Shape {
+        String color;  // instance field
+
+        Shape(String color) { this.color = color; }  // constructor
+
+        // abstract method → subclass MUST implement
+        abstract double calculateArea();
+
+        // concrete method → subclass can use or override
+        void describe() {
+            System.out.println("I'm a " + color + " " +
+                    getClass().getSimpleName() + " with area: " + calculateArea());
+        }
+    }
+
+    // ── CONCRETE CLASSES ───────────────────────────────────
+
+    // Animal class → demonstrates constructor, this, encapsulation
+    static class Animal {
+        // Encapsulation: private fields accessed via public getters/setters
+        private String species;
+        private String name;
+        private int    age;
+
+        // Constructor → same name as class, no return type
+        Animal(String species, String name, int age) {
+            // 'this' → refers to current object's fields
+            this.species = species;
+            this.name    = name;
+            this.age     = age;
+        }
+
+        // Getter methods (accessor)
+        String getName()    { return name; }
+        int    getAge()     { return age;  }
+        String getSpecies() { return species; }
+
+        // Setter methods (mutator)
+        void setName(String name) { this.name = name; }
+        void setAge(int age) {
+            if (age < 0) throw new IllegalArgumentException("Age can't be negative");
+            this.age = age;
+        }
+
+        // Virtual method → can be overridden (polymorphism)
+        void speak() {
+            System.out.println(name + " says: ...");
+        }
+
+        // toString → human-readable representation
+        @Override
+        public String toString() {
+            return "Animal{species='" + species + "', name='" + name + "', age=" + age + "}";
+        }
+    }
+
+    // Dog extends Animal → Inheritance
+    static class Dog extends Animal {
+        private String breed;
+
+        Dog(String name, int age) {
+            super("Dog", name, age);   // 'super()' calls parent constructor → MUST be first line
+            this.breed = "Mixed";
+        }
+
+        Dog(String name, int age, String breed) {
+            super("Dog", name, age);
+            this.breed = breed;
+        }
+
+        // @Override → replaces parent's method (polymorphism)
+        @Override
+        void speak() {
+            System.out.println(getName() + " says: Woof! Woof!");
+        }
+
+        // Dog-specific method
+        void fetch() {
+            System.out.println(getName() + " fetches the ball!");
+        }
+
+        // Call parent method from child
+        void superSpeak() {
+            super.speak();   // 'super.' calls parent's version
+        }
+    }
+
+    // Car → implements multiple interfaces (Java allows this, unlike multiple class inheritance)
+    static class Car implements Drivable, Chargeable {
+        private String brand;
+        private String model;
+
+        Car(String brand, String model) {
+            this.brand = brand;
+            this.model = model;
+        }
+
+        @Override public void drive()  { System.out.println(brand + " " + model + " driving!"); }
+        @Override public void stop()   { System.out.println(brand + " " + model + " stopped!"); }
+        @Override public void charge() { System.out.println(brand + " " + model + " charging!"); }
+
+        @Override
+        public String toString() { return brand + " " + model; }
+    }
+
+    // Circle extends Shape → implements abstract method
+    static class Circle extends Shape {
+        private double radius;
+
+        Circle(double radius) {
+            super("red");    // calls Shape constructor
+            this.radius = radius;
+        }
+
+        @Override
+        double calculateArea() {
+            return Math.PI * radius * radius;  // Math.PI = 3.14159...
+        }
+    }
+
+    // ── GENERICS CLASS ─────────────────────────────────────
+    static class GenericBox<T> {     // T is type parameter
+        private T value;             // T used as field type
+
+        GenericBox(T value) { this.value = value; }  // T in constructor
+
+        T getValue() { return value; }   // T as return type
+    }
+
+    // ── ENUM DEFINITIONS ───────────────────────────────────
+    enum TestStatus {
+        PASSED, FAILED, SKIPPED, PENDING  // constants
+    }
+
+    // Enum with fields and methods
+    enum Browser {
+        CHROME("ChromeDriver", "120"),
+        FIREFOX("GeckoDriver", "119"),
+        EDGE("EdgeDriver", "119"),
+        SAFARI("SafariDriver", "17");
+
+        private final String driver;   // fields in enum
+        private final String version;
+
+        Browser(String driver, String version) {  // enum constructor (always private)
+            this.driver  = driver;
+            this.version = version;
+        }
+
+        String getDriver()  { return driver;  }  // methods in enum
+        String getVersion() { return version; }
+    }
+
+    // ── CUSTOM EXCEPTION ───────────────────────────────────
+    // Checked exception → extend Exception
+    // Unchecked exception → extend RuntimeException
+    static class TestFailedException extends RuntimeException {
+        private final String testName;
+
+        TestFailedException(String message) {
+            super(message);          // call parent constructor
+            this.testName = "Unknown";
+        }
+
+        TestFailedException(String testName, String message) {
+            super(message);
+            this.testName = testName;
+        }
+
+        String getTestName() { return testName; }
+    }
+
+    // ── SYNCHRONIZED COUNTER ───────────────────────────────
+    // 'synchronized' → thread-safe: only one thread runs this method at a time
+    static class Counter {
+        private static int count = 0;   // static → shared across all instances
+
+        synchronized void increment() {  // only one thread at a time
+            count++;
+        }
+
+        static int getCount() { return count; }
+    }
+
+    // ── INNER / NESTED CLASSES ─────────────────────────────
+    static class Outer {
+        private String data;
+
+        Outer(String data) { this.data = data; }
+
+        // Non-static inner class → has access to outer class members
+        class Inner {
+            void display() {
+                System.out.println("Inner accessing outer data: " + data); // can access 'data'
+            }
+        }
+
+        // Static nested class → does NOT have access to outer class members
+        static class StaticNested {
+            void show() {
+                System.out.println("Static nested class (no outer access)");
+            }
+        }
+    }
+
+    // ── FUNCTIONAL INTERFACE ───────────────────────────────
+    @FunctionalInterface   // annotation: enforces exactly one abstract method
+    interface SDETAction {
+        void perform(String element, int timeout);  // only abstract method
+        // default and static methods are allowed in functional interface
+        default void log() { System.out.println("Action logged"); }
+    }
+
+    // ── MATH UTILS (static methods) ────────────────────────
+    static class MathUtils {
+        // private constructor → prevents instantiation (utility class pattern)
+        private MathUtils() {}
+
+        static int    add(int a, int b)           { return a + b; }
+        static double power(double base, int exp) { return Math.pow(base, exp); }
+        static int    abs(int n)                  { return Math.abs(n); }
+    }
+
+    // ── SDET PATTERNS ──────────────────────────────────────
+
+    // Page Object Model
+    static class LoginPage {
+        private String baseUrl;
+        LoginPage(String baseUrl) { this.baseUrl = baseUrl; }
+        void navigate()                         { System.out.println("Navigate to: " + baseUrl); }
+        void enterCredentials(String u, String p) { System.out.println("Enter creds: " + u + "/" + p); }
+        void clickLogin()                       { System.out.println("Click login button"); }
+    }
+
+    // Builder Pattern
+    static class TestUser {
+        private String username, password, email, role;
+        private TestUser() {}
+
+        // Builder is a static nested class
+        static class Builder {
+            private TestUser user = new TestUser();
+            Builder username(String v) { user.username = v; return this; }
+            Builder password(String v) { user.password = v; return this; }
+            Builder email(String v)    { user.email    = v; return this; }
+            Builder role(String v)     { user.role     = v; return this; }
+            TestUser build()           { return user; }
+        }
+
+        @Override
+        public String toString() {
+            return "TestUser{user=" + username + ", email=" + email + ", role=" + role + "}";
+        }
+    }
+
+    // Singleton Pattern (thread-safe with double-checked locking)
+    static class Config {
+        private static volatile Config instance;  // 'volatile' ensures visibility across threads
+        private String env = "QA";
+
+        private Config() {}   // private → no direct instantiation
+
+        static Config getInstance() {
+            if (instance == null) {                    // first check (no lock)
+                synchronized (Config.class) {           // only one thread enters
+                    if (instance == null) {             // second check (with lock)
+                        instance = new Config();
+                    }
+                }
+            }
+            return instance;
+        }
+
+        String getEnv() { return env; }
+    }
+
+    // Factory Pattern
+    interface TestEnvironment {
+        String getBaseUrl();
+        String getApiKey();
+    }
+
+    static class QAEnvironment implements TestEnvironment {
+        public String getBaseUrl() { return "https://qa.example.com"; }
+        public String getApiKey()  { return "qa-key-123"; }
+    }
+
+    static class ProdEnvironment implements TestEnvironment {
+        public String getBaseUrl() { return "https://prod.example.com"; }
+        public String getApiKey()  { return "prod-key-xyz"; }
+    }
+
+    static class EnvironmentFactory {
+        static TestEnvironment create(String type) {
+            return switch (type.toUpperCase()) {
+                case "QA"   -> new QAEnvironment();
+                case "PROD" -> new ProdEnvironment();
+                default     -> throw new IllegalArgumentException("Unknown env: " + type);
+            };
+        }
+    }
+
+}  // end of class JavaAllConcepts_SDET
+
+
+// ─────────────────────────────────────────────────────────────
+// EXTRA: RECORDS (Java 16+) — immutable data carriers
+// ─────────────────────────────────────────────────────────────
+// 'record' → auto-generates: constructor, getters, equals, hashCode, toString
+// Perfect for: test data, DTOs, API response models
+record TestCase(String id, String name, String status) {
+    // Compact constructor (for validation)
+    TestCase {
+        if (id == null || id.isBlank())
+            throw new IllegalArgumentException("Test ID cannot be blank");
+    }
+
+    // Custom method allowed in records
+    boolean isPassed() {
+        return "PASSED".equalsIgnoreCase(status);
+    }
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// EXTRA: SEALED CLASSES (Java 17+)
+// ─────────────────────────────────────────────────────────────
+// 'sealed' + 'permits' → restricts which classes can extend/implement
+// 'non-sealed' → allows further extension
+// 'permits' → explicit list of allowed subtypes
+
+sealed class ApiResponse permits SuccessResponse, ErrorResponse {
+    protected int statusCode;
+    ApiResponse(int statusCode) { this.statusCode = statusCode; }
+    int getStatusCode()         { return statusCode; }
+}
+
+final class SuccessResponse extends ApiResponse {
+    private String body;
+    SuccessResponse(String body) { super(200); this.body = body; }
+    String getBody() { return body; }
+}
+
+final class ErrorResponse extends ApiResponse {
+    private String message;
+    ErrorResponse(int code, String message) { super(code); this.message = message; }
+    String getMessage() { return message; }
+}
+
+
+/*
+ * ════════════════════════════════════════════════════════════
+ *   QUICK REFERENCE: ALL JAVA KEYWORDS
+ * ════════════════════════════════════════════════════════════
+ *
+ * DATA TYPES:    byte short int long float double char boolean void
+ *
+ * CLASS:         class interface enum record extends implements
+ *
+ * MODIFIERS:     public private protected static final abstract
+ *                synchronized volatile transient native strictfp
+ *
+ * CONTROL FLOW:  if else switch case default break continue return
+ *
+ * LOOPS:         for while do
+ *
+ * EXCEPTION:     try catch finally throw throws
+ *
+ * OOP:           new this super instanceof null
+ *
+ * PACKAGE:       package import
+ *
+ * SEALED:        sealed permits non-sealed (Java 17+)
+ *
+ * MISC:          assert var (Java 10+) yield (Java 14+)
+ *
+ * RESERVED:      goto const  (reserved but NOT used)
+ *
+ * ════════════════════════════════════════════════════════════
+ *   SDET QUICK TIPS
+ * ════════════════════════════════════════════════════════════
+ *
+ * 1. Use ArrayList for ordered test steps, HashSet for deduplication
+ * 2. HashMap for test configs/properties, LinkedHashMap for ordered results
+ * 3. Stream + lambda for filtering/transforming test data
+ * 4. Optional to handle nullable WebDriver finds gracefully
+ * 5. try-with-resources for file readers, DB connections
+ * 6. ExecutorService for parallel test execution
+ * 7. StringBuilder for building dynamic XPaths/CSS selectors
+ * 8. Enum for browser types, test status, environment
+ * 9. Builder pattern for complex test data setup
+ * 10. Singleton for WebDriver, Config, Logger instances
+ *
+ * ════════════════════════════════════════════════════════════
+ */
